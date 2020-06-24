@@ -1,0 +1,1 @@
+vcpu is an attempt at creating a simple virtual CPU based on the Scott CPU described in the book *"But how do it know"* by J. Clark Scott.
