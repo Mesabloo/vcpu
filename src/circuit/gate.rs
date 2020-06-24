@@ -29,3 +29,23 @@ impl<'a> Computeable<'a> for NotGate<'a> {
     }
 }
 
+pub struct AndGate<'a>(Gate<'a>);
+impl<'a> Computeable<'a> for AndGate<'a> {
+    fn compute(self) {
+        // Truth table:
+        //
+        //  a  |  b  |  c
+        // ON  | ON  | ON
+        // OFF | OFF | OFF
+        // OFF | ON  | OFF
+        // ON  | OFF | OFF
+
+        self.0
+            .c
+            .set(if self.0.a.state() == ON && self.0.b.state() == ON {
+                ON
+            } else {
+                OFF
+            });
+    }
+}
