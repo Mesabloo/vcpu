@@ -49,3 +49,24 @@ impl<'a> Computeable<'a> for AndGate<'a> {
             });
     }
 }
+
+pub struct NAndGate<'a>(Gate<'a>);
+impl<'a> Computeable<'a> for NAndGate<'a> {
+    fn compute(self) {
+        // Truth table:
+        //
+        //  a  |  b  |  c
+        // OFF | OFF | ON
+        // OFF | ON  | OFF
+        // ON  | OFF | OFF
+        // ON  | ON  | OFF
+
+        self.0
+            .c
+            .set(if self.0.a.state() == OFF && self.0.b.state() == OFF {
+                ON
+            } else {
+                OFF
+            });
+    }
+}
