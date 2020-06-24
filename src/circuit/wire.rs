@@ -1,4 +1,4 @@
-use crate::units::Bit;
+use crate::units::bit::Bit;
 
 /// A wire is a basic unit containing only one bit at a time.
 pub struct Wire(Bit);
