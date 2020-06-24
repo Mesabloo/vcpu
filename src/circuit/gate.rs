@@ -13,6 +13,9 @@ use crate::units::bit::{OFF, ON};
 pub fn not<'a>(a: &'a Wire, _b: &'a Wire, c: &'a mut Wire) {
     // We do not use the "b" argument because "a == b"
     c.set(if a.state() == ON { OFF } else { ON });
+    // This could be written:
+    // > nand(a, a, c)
+    // because the "a" and "b" wires are the same.
 }
 
 /// Truth table:
@@ -24,6 +27,12 @@ pub fn not<'a>(a: &'a Wire, _b: &'a Wire, c: &'a mut Wire) {
 /// ON  | OFF | OFF
 pub fn and<'a>(a: &'a Wire, b: &'a Wire, c: &'a mut Wire) {
     c.set(if a.state() == ON && b.state() == ON { ON } else { OFF });
+    // This could be written:
+    // > nand(a, b, c);
+    // > not(c, c, c);
+    // but it kinda sucks, because we can do the computation directly
+    // and this also semantically means that the input wire of our not gate is the same
+    // as the two input ones. This doesn't make a lot of sense.
 }
 
 /// Truth table:
