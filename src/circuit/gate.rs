@@ -1,12 +1,8 @@
-use crate::circuit::wire::Wire;
+use crate::circuit::wire::WireRef;
+use crate::units::bit::{OFF, ON};
 
 // NOTE: When implementing gates, despite the fact that our bits are represented currently as bools,
 // we won't be using any of the boolean operators. In fact, we will code them all as if they never existed.
-
-use crate::units::bit::{OFF, ON};
-
-use std::cell::RefCell;
-use std::rc::Rc;
 
 /// Truth table:
 ///
@@ -17,7 +13,7 @@ pub struct NOTGate {
     nand: NANDGate,
 }
 impl NOTGate {
-    pub fn new(a: Rc<RefCell<Wire>>, c: Rc<RefCell<Wire>>) -> Self {
+    pub fn new(a: WireRef, c: WireRef) -> Self {
         NOTGate {
             nand: NANDGate::new(a.clone(), a, c),
         }
@@ -40,8 +36,8 @@ pub struct ANDGate {
     not: NOTGate,
 }
 impl ANDGate {
-    pub fn new(a: Rc<RefCell<Wire>>, b: Rc<RefCell<Wire>>, c: Rc<RefCell<Wire>>) -> Self {
-        let x = Rc::new(RefCell::new(Wire::default()));
+    pub fn new(a: WireRef, b: WireRef, c: WireRef) -> Self {
+        let x = WireRef::default();
         ANDGate {
             nand: NANDGate::new(a, b, x.clone()),
             not: NOTGate::new(x, c),
@@ -62,12 +58,12 @@ impl ANDGate {
 /// ON  | OFF | OFF
 /// ON  | ON  | OFF
 pub struct NANDGate {
-    in1: Rc<RefCell<Wire>>,
-    in2: Rc<RefCell<Wire>>,
-    out: Rc<RefCell<Wire>>,
+    in1: WireRef,
+    in2: WireRef,
+    out: WireRef,
 }
 impl NANDGate {
-    pub fn new(a: Rc<RefCell<Wire>>, b: Rc<RefCell<Wire>>, c: Rc<RefCell<Wire>>) -> Self {
+    pub fn new(a: WireRef, b: WireRef, c: WireRef) -> Self {
         NANDGate {
             in1: a,
             in2: b,

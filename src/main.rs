@@ -1,15 +1,12 @@
-use vcpu::circuit::{wire::Wire, gate::ANDGate};
-use vcpu::units::bit::{ON, OFF};
-use std::rc::Rc;
-use std::cell::RefCell;
+use vcpu::circuit::{gate::ANDGate, wire::WireRef};
+use vcpu::units::bit::{OFF, ON};
 
 fn main() {
-    let in1 = Rc::new(RefCell::new(Wire::default()));
-    let in2 = Rc::new(RefCell::new(Wire::default()));
-    let out = Rc::new(RefCell::new(Wire::default()));
-    in1.borrow_mut().set(OFF);
+    let in1 = WireRef::default();
+    let in2 = WireRef::default();
+    let out = WireRef::default();
     in2.borrow_mut().set(ON);
-    out.borrow_mut().set(OFF);
+    // in1 is OFF
 
     let and = ANDGate::new(in1, in2, out.clone());
     and.run();
