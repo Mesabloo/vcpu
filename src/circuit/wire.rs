@@ -13,3 +13,8 @@ impl Wire {
     }
 }
 
+impl Default for Wire {
+    fn default() -> Wire {
+        Wire(Bit::default())
+    }
+}
