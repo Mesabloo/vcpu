@@ -5,17 +5,27 @@ use crate::circuit::wire::Wire;
 
 use crate::units::bit::{OFF, ON};
 
+use std::cell::RefCell;
+use std::rc::Rc;
+
 /// Truth table:
 ///
 ///   a  |  b  |  c
 ///  ON  | ON  | OFF
 ///  OFF | OFF | ON
-pub fn not<'a>(a: &'a Wire, _b: &'a Wire, c: &'a mut Wire) {
-    // We do not use the "b" argument because "a == b"
-    c.set(if a.state() == ON { OFF } else { ON });
-    // This could be written:
-    // > nand(a, a, c)
-    // because the "a" and "b" wires are the same.
+pub struct NOTGate {
+    nand: NANDGate,
+}
+impl NOTGate {
+    pub fn new(a: Rc<RefCell<Wire>>, c: Rc<RefCell<Wire>>) -> Self {
+        NOTGate {
+            nand: NANDGate::new(a.clone(), a, c),
+        }
+    }
+
+    pub fn run(self) {
+        self.nand.run();
+    }
 }
 
 /// Truth table:
@@ -25,14 +35,23 @@ pub fn not<'a>(a: &'a Wire, _b: &'a Wire, c: &'a mut Wire) {
 /// OFF | OFF | OFF
 /// OFF | ON  | OFF
 /// ON  | OFF | OFF
-pub fn and<'a>(a: &'a Wire, b: &'a Wire, c: &'a mut Wire) {
-    c.set(if a.state() == ON && b.state() == ON { ON } else { OFF });
-    // This could be written:
-    // > nand(a, b, c);
-    // > not(c, c, c);
-    // but it kinda sucks, because we can do the computation directly
-    // and this also semantically means that the input wire of our not gate is the same
-    // as the two input ones. This doesn't make a lot of sense.
+pub struct ANDGate {
+    nand: NANDGate,
+    not: NOTGate,
+}
+impl ANDGate {
+    pub fn new(a: Rc<RefCell<Wire>>, b: Rc<RefCell<Wire>>, c: Rc<RefCell<Wire>>) -> Self {
+        let x = Rc::new(RefCell::new(Wire::default()));
+        ANDGate {
+            nand: NANDGate::new(a, b, x.clone()),
+            not: NOTGate::new(x, c),
+        }
+    }
+
+    pub fn run(self) {
+        self.nand.run();
+        self.not.run();
+    }
 }
 
 /// Truth table:
@@ -42,6 +61,27 @@ pub fn and<'a>(a: &'a Wire, b: &'a Wire, c: &'a mut Wire) {
 /// OFF | ON  | OFF
 /// ON  | OFF | OFF
 /// ON  | ON  | OFF
-pub fn nand<'a>(a: &'a Wire, b: &'a Wire, c: &'a mut Wire) {
-    c.set(if a.state() == OFF && b.state() == OFF { ON } else { OFF });
+pub struct NANDGate {
+    in1: Rc<RefCell<Wire>>,
+    in2: Rc<RefCell<Wire>>,
+    out: Rc<RefCell<Wire>>,
+}
+impl NANDGate {
+    pub fn new(a: Rc<RefCell<Wire>>, b: Rc<RefCell<Wire>>, c: Rc<RefCell<Wire>>) -> Self {
+        NANDGate {
+            in1: a,
+            in2: b,
+            out: c,
+        }
+    }
+
+    pub fn run(self) {
+        (*self.out).borrow_mut().set(
+            if (*self.in1).borrow().state() == ON && (*self.in2).borrow().state() == ON {
+                OFF
+            } else {
+                ON
+            },
+        );
+    }
 }
