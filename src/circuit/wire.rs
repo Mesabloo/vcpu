@@ -4,37 +4,34 @@ use std::ops::Deref;
 use std::rc::Rc;
 
 /// A wire is a basic unit containing only one bit at a time.
-pub struct Wire(pub Bit);
-
+#[derive(Clone)]
+pub struct Wire(Rc<RefCell<Bit>>);
 impl Wire {
-    pub fn set(&mut self, b: Bit) -> () {
-        self.0 = b;
+    pub fn set(&self, b: Bit) {
+        match self {
+            Wire(rc) => {
+                *rc.borrow_mut() = b;
+            }
+        }
     }
 
     pub fn state(&self) -> Bit {
-        self.0
+        match self {
+            Wire(rc) => *rc.borrow(),
+        }
     }
 }
-
 impl Default for Wire {
     fn default() -> Wire {
-        Wire(Bit::default())
+        Wire(Rc::new(RefCell::new(Bit::default())))
     }
 }
-
-#[derive(Clone)]
-pub struct WireRef(Rc<RefCell<Wire>>);
-impl Default for WireRef {
-    fn default() -> WireRef {
-        WireRef(Rc::new(RefCell::new(Wire::default())))
-    }
-}
-impl Deref for WireRef {
-    type Target = <Rc<RefCell<Wire>> as Deref>::Target;
+impl Deref for Wire {
+    type Target = <Rc<RefCell<Bit>> as Deref>::Target;
 
     fn deref(&self) -> &Self::Target {
         match self {
-            WireRef(rc) => rc.deref(),
+            Wire(rc) => rc.deref(),
         }
     }
 }

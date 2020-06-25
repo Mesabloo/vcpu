@@ -1,4 +1,4 @@
-use crate::circuit::wire::WireRef;
+use crate::circuit::wire::Wire;
 use crate::units::bit::{OFF, ON};
 
 // NOTE: When implementing gates, despite the fact that our bits are represented currently as bools,
@@ -13,7 +13,7 @@ pub struct NOTGate {
     nand: NANDGate,
 }
 impl NOTGate {
-    pub fn new(a: WireRef, c: WireRef) -> Self {
+    pub fn new(a: Wire, c: Wire) -> Self {
         NOTGate {
             nand: NANDGate::new(a.clone(), a, c),
         }
@@ -36,8 +36,8 @@ pub struct ANDGate {
     not: NOTGate,
 }
 impl ANDGate {
-    pub fn new(a: WireRef, b: WireRef, c: WireRef) -> Self {
-        let x = WireRef::default();
+    pub fn new(a: Wire, b: Wire, c: Wire) -> Self {
+        let x = Wire::default();
         ANDGate {
             nand: NANDGate::new(a, b, x.clone()),
             not: NOTGate::new(x, c),
@@ -58,12 +58,12 @@ impl ANDGate {
 /// ON  | OFF | OFF
 /// ON  | ON  | OFF
 pub struct NANDGate {
-    in1: WireRef,
-    in2: WireRef,
-    out: WireRef,
+    in1: Wire,
+    in2: Wire,
+    out: Wire,
 }
 impl NANDGate {
-    pub fn new(a: WireRef, b: WireRef, c: WireRef) -> Self {
+    pub fn new(a: Wire, b: Wire, c: Wire) -> Self {
         NANDGate {
             in1: a,
             in2: b,
@@ -72,12 +72,11 @@ impl NANDGate {
     }
 
     pub fn run(self) {
-        (*self.out).borrow_mut().set(
-            if (*self.in1).borrow().state() == ON && (*self.in2).borrow().state() == ON {
+        self.out
+            .set(if self.in1.state() == ON && self.in2.state() == ON {
                 OFF
             } else {
                 ON
-            },
-        );
+            });
     }
 }
