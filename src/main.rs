@@ -1,4 +1,4 @@
-use vcpu::circuit::{gate::ANDGate, wire::Wire};
+use vcpu::circuit::{gate::MemoryGate, wire::Wire};
 use vcpu::units::bit::{OFF, ON};
 
 fn main() {
@@ -6,13 +6,20 @@ fn main() {
     let in2 = Wire::default();
     let out = Wire::default();
     in2.set(ON);
+    in1.set(ON);
     // in1 is OFF
 
-    let and = ANDGate::new(in1, in2, out.clone());
-    and.run();
+    let mem = MemoryGate::new(in1.clone(), in2.clone(), out.clone());
+    mem.run();
 
-    let out_bit = out.state();
-    assert_eq!(OFF, out_bit);
+    assert_eq!(ON, out.state());
+
+    in2.set(OFF);
+    in1.set(OFF);
+
+    mem.run();
+
+    assert_eq!(ON, out.state());
 
     println!("Done!");
 }
