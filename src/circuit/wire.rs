@@ -4,12 +4,6 @@ use crate::units::bit::Bit;
 pub struct Wire(pub Bit);
 
 impl Wire {
-    pub fn is_on(&self) -> bool {
-        match self {
-            Wire(state) => *state,
-        }
-    }
-
     pub fn set(&mut self, b: Bit) -> () {
         self.0 = b;
     }
@@ -18,3 +12,4 @@ impl Wire {
         self.0
     }
 }
+
