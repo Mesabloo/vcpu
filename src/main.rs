@@ -1,4 +1,5 @@
-use vcpu::circuit::{gate::MemoryGate, wire::Wire};
+use vcpu::circuit::wire::Wire;
+use vcpu::component::memory::MemoryGate;
 use vcpu::units::bit::{OFF, ON};
 
 fn main() {
