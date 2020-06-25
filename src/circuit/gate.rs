@@ -19,7 +19,7 @@ impl NOTGate {
         }
     }
 
-    pub fn run(self) {
+    pub fn run(&self) {
         self.nand.run();
     }
 }
@@ -44,7 +44,7 @@ impl ANDGate {
         }
     }
 
-    pub fn run(self) {
+    pub fn run(&self) {
         self.nand.run();
         self.not.run();
     }
@@ -71,7 +71,7 @@ impl NANDGate {
         }
     }
 
-    pub fn run(self) {
+    pub fn run(&self) {
         self.out
             .set(if self.in1.state() == ON && self.in2.state() == ON {
                 OFF
@@ -117,10 +117,10 @@ impl MemoryGate {
         }
     }
 
-    pub fn run(self) {
+    pub fn run(&self) {
         self.g1.run();
         self.g2.run();
-        self.g3.run();
         self.g4.run();
+        self.g3.run();
     }
 }
