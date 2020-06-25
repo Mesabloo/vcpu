@@ -1,0 +1,1 @@
+pub const BUS_WIDTH: u8 = 8;
