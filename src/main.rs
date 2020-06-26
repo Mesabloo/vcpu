@@ -1,13 +1,11 @@
-use vcpu::circuit::wire::Wire;
+use vcpu::circuit::wire::{Wire, Bus};
 use vcpu::common::BUS_WIDTH;
 use vcpu::component::memory::register::Register;
 use vcpu::units::bit::{Bit, OFF, ON};
 
-use std::iter::repeat_with;
-
 fn main() {
-    let wires_in: Vec<Wire> = repeat_with(|| Wire::default()).take(BUS_WIDTH).collect();
-    let wires_out: Vec<Wire> = repeat_with(|| Wire::default()).take(BUS_WIDTH).collect();
+    let wires_in = Bus::new();
+    let wires_out = Bus::new();
     let set = Wire::default();
     let enable = Wire::default();
 

@@ -1,15 +1,11 @@
-use crate::circuit::wire::Wire;
-use crate::common::BUS_WIDTH;
+use crate::circuit::wire::{Wire, Bus};
 use crate::component::memory::bit::MemoryBit;
 
 pub struct MemoryByte {
     mem: Vec<MemoryBit>,
 }
 impl MemoryByte {
-    pub fn new(is: Vec<Wire>, s: Wire, os: Vec<Wire>) -> Self {
-        assert_eq!(is.len(), BUS_WIDTH);
-        assert_eq!(os.len(), BUS_WIDTH);
-
+    pub fn new(is: Bus, s: Wire, os: Bus) -> Self {
         MemoryByte {
             mem: is
                 .into_iter()
