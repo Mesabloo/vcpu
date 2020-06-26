@@ -46,11 +46,16 @@ impl Deref for Wire {
 pub struct Bus(Vec<Wire>); // length = BUS_WIDTH
 impl Bus {
     pub fn new() -> Self {
-        Bus(repeat_with(|| Wire::default()).take(BUS_WIDTH).collect())
+        Bus(repeat_with(Wire::default).take(BUS_WIDTH).collect())
     }
 
     pub fn iter(&self) -> Iter<Wire> {
         self.0.iter()
+    }
+}
+impl Default for Bus {
+    fn default() -> Self {
+        Self::new()
     }
 }
 impl IntoIterator for Bus {
