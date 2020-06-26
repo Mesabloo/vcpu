@@ -1,26 +1,42 @@
 use vcpu::circuit::wire::Wire;
-use vcpu::component::memory::bit::MemoryBit;
-use vcpu::units::bit::{OFF, ON};
+use vcpu::common::BUS_WIDTH;
+use vcpu::component::memory::register::Register;
+use vcpu::units::bit::{Bit, OFF, ON};
+
+use std::iter::repeat_with;
 
 fn main() {
-    let in1 = Wire::default();
-    let in2 = Wire::default();
-    let out = Wire::default();
-    in2.set(ON);
-    in1.set(ON);
-    // in1 is OFF
+    let wires_in: Vec<Wire> = repeat_with(|| Wire::default()).take(BUS_WIDTH).collect();
+    let wires_out: Vec<Wire> = repeat_with(|| Wire::default()).take(BUS_WIDTH).collect();
+    let set = Wire::default();
+    let enable = Wire::default();
 
-    let mem = MemoryBit::new(in1.clone(), in2.clone(), out.clone());
-    mem.run();
+    wires_in[0].set(ON);
+    set.set(ON);
 
-    assert_eq!(ON, out.state());
+    let r = Register::new(
+        wires_in.clone(),
+        set.clone(),
+        enable.clone(),
+        wires_out.clone(),
+    );
+    r.run();
 
-    in2.set(OFF);
-    in1.set(OFF);
+    assert_eq!(
+        wires_out.iter().map(|w| w.state()).collect::<Vec<Bit>>(),
+        vec![OFF; BUS_WIDTH]
+    );
 
-    mem.run();
+    wires_in[0].set(OFF);
+    set.set(OFF);
+    enable.set(ON);
 
-    assert_eq!(ON, out.state());
+    r.run();
+
+    assert_eq!(
+        wires_out.iter().map(|w| w.state()).collect::<Vec<Bit>>(),
+        vec![ON, OFF, OFF, OFF, OFF, OFF, OFF, OFF]
+    );
 
     println!("Done!");
 }
