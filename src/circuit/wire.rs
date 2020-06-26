@@ -4,7 +4,10 @@ use std::cell::RefCell;
 use std::iter::repeat_with;
 use std::iter::IntoIterator;
 use std::ops::Deref;
+use std::ops::Index;
+use std::ops::IndexMut;
 use std::rc::Rc;
+use std::slice::Iter;
 
 /// A wire is a basic unit containing only one bit at a time.
 #[derive(Clone)]
@@ -45,6 +48,10 @@ impl Bus {
     pub fn new() -> Self {
         Bus(repeat_with(|| Wire::default()).take(BUS_WIDTH).collect())
     }
+
+    pub fn iter(&self) -> Iter<Wire> {
+        self.0.iter()
+    }
 }
 impl IntoIterator for Bus {
     type Item = Wire;
@@ -52,5 +59,17 @@ impl IntoIterator for Bus {
 
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_iter()
+    }
+}
+impl Index<usize> for Bus {
+    type Output = Wire;
+
+    fn index(&self, i: usize) -> &Self::Output {
+        self.0.index(i)
+    }
+}
+impl IndexMut<usize> for Bus {
+    fn index_mut(&mut self, i: usize) -> &mut Self::Output {
+        self.0.index_mut(i)
     }
 }
