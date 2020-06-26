@@ -1,6 +1,6 @@
 use crate::circuit::wire::Wire;
-use crate::component::memory::bit::MemoryBit;
 use crate::common::BUS_WIDTH;
+use crate::component::memory::bit::MemoryBit;
 
 pub struct MemoryByte {
     mem: Vec<MemoryBit>,
