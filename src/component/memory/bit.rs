@@ -1,19 +1,19 @@
 use crate::circuit::gate::NANDGate;
 use crate::circuit::wire::Wire;
 
-pub struct MemoryGate {
+pub struct MemoryBit {
     g1: NANDGate,
     g2: NANDGate,
     g3: NANDGate,
     g4: NANDGate,
 }
-impl MemoryGate {
+impl MemoryBit {
     pub fn new(i: Wire, s: Wire, o: Wire) -> Self {
         let a = Wire::default();
         let b = Wire::default();
         let c = Wire::default();
 
-        MemoryGate {
+        MemoryBit {
             g1: NANDGate::new(i, s.clone(), a.clone()),
             g2: NANDGate::new(a.clone(), s, b.clone()),
             g3: NANDGate::new(a, c.clone(), o.clone()),

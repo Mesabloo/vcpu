@@ -1,5 +1,5 @@
 use vcpu::circuit::wire::Wire;
-use vcpu::component::memory::MemoryGate;
+use vcpu::component::memory::bit::MemoryBit;
 use vcpu::units::bit::{OFF, ON};
 
 fn main() {
@@ -10,7 +10,7 @@ fn main() {
     in1.set(ON);
     // in1 is OFF
 
-    let mem = MemoryGate::new(in1.clone(), in2.clone(), out.clone());
+    let mem = MemoryBit::new(in1.clone(), in2.clone(), out.clone());
     mem.run();
 
     assert_eq!(ON, out.state());
