@@ -1,5 +1,8 @@
+use crate::common::BUS_WIDTH;
 use crate::units::bit::Bit;
 use std::cell::RefCell;
+use std::iter::repeat_with;
+use std::iter::IntoIterator;
 use std::ops::Deref;
 use std::rc::Rc;
 
@@ -33,5 +36,21 @@ impl Deref for Wire {
         match self {
             Wire(rc) => rc.deref(),
         }
+    }
+}
+
+#[derive(Clone)]
+pub struct Bus(Vec<Wire>); // length = BUS_WIDTH
+impl Bus {
+    pub fn new() -> Self {
+        Bus(repeat_with(|| Wire::default()).take(BUS_WIDTH).collect())
+    }
+}
+impl IntoIterator for Bus {
+    type Item = Wire;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
     }
 }
