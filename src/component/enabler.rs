@@ -1,5 +1,5 @@
 use crate::circuit::gate::ANDGate;
-use crate::circuit::wire::{Wire, Bus};
+use crate::circuit::wire::{Bus, Wire};
 
 pub struct Enabler {
     gates: Vec<ANDGate>, // must be of a length of "BUS_WIDTH"

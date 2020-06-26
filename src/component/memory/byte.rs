@@ -1,4 +1,4 @@
-use crate::circuit::wire::{Wire, Bus};
+use crate::circuit::wire::{Bus, Wire};
 use crate::component::memory::bit::MemoryBit;
 
 pub struct MemoryByte {

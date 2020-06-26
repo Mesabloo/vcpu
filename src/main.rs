@@ -1,4 +1,4 @@
-use vcpu::circuit::wire::{Wire, Bus};
+use vcpu::circuit::wire::{Bus, Wire};
 use vcpu::common::BUS_WIDTH;
 use vcpu::component::memory::register::Register;
 use vcpu::units::bit::{Bit, OFF, ON};
