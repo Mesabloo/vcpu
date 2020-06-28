@@ -1,6 +1,6 @@
 use crate::circuit::gate::ANDGate;
-use crate::component::memory::register::Register;
 use crate::circuit::wire::{Bus, Wire};
+use crate::component::memory::register::Register;
 
 pub struct Cell {
     x: ANDGate,
