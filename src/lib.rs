@@ -1,3 +1,6 @@
+#![allow(incomplete_features)] // for const_generics
+#![feature(const_generics)]
+#![feature(generators, generator_trait)]
 #![feature(iterator_fold_self)]
 
 pub mod circuit;
