@@ -80,3 +80,32 @@ impl NANDGate {
             });
     }
 }
+
+pub struct MultiANDGate {
+    ands: Vec<ANDGate>, // at least 1 gate
+}
+impl MultiANDGate {
+    pub fn new(is: Vec<Wire>, out: Wire) -> Self {
+        let n = is.len();
+        assert!(n >= 2);
+
+        let mut ands = vec![];
+        if is.len() == 2 {
+            ands.push(ANDGate::new(is[0].clone(), is[1].clone(), out));
+        } else {
+            let in1 = is[n - 1].clone();
+            let in2 = is.into_iter().take(n - 1).fold_first(|in1, in2| {
+                let out = Wire::default();
+                ands.push(ANDGate::new(in1, in2, out.clone()));
+                out
+            }).unwrap();
+            ands.push(ANDGate::new(in1, in2, out));
+        }
+
+        MultiANDGate { ands }
+    }
+
+    pub fn run(&self) {
+        self.ands.iter().for_each(|g| g.run());
+    }
+}
