@@ -1,6 +1,6 @@
 #![cfg(test)]
 
-use vcpu::circuit::wire::*;
+use vcpu::circuit::{gate::*, wire::*};
 use vcpu::units::bit::{OFF, ON};
 
 #[test]
@@ -52,4 +52,19 @@ fn bus_state_shared() {
     let inner_b1: Vec<Wire> = b1.into();
     let inner_b2: Vec<Wire> = b2.into();
     assert_eq!(inner_b1, inner_b2);
+}
+
+#[test]
+fn notgate_reversing_bit() {
+    let in1 = Wire::default();
+    let out = Wire::default();
+    let not = NOTGate::new(in1, out.clone());
+
+    not.run();
+
+    assert_eq!(out.state(), ON);
+
+    not.run();
+
+    assert_eq!(out.state(), OFF);
 }
