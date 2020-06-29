@@ -10,7 +10,7 @@ use std::rc::Rc;
 use std::slice::Iter;
 
 /// A wire is a basic unit containing only one bit at a time.
-#[derive(Clone, PartialEq, PartialOrd, Eq, Ord)]
+#[derive(PartialEq, PartialOrd, Eq, Ord)]
 pub struct Wire(Rc<RefCell<Bit>>);
 impl Wire {
     pub fn set(&self, b: Bit) {
@@ -39,6 +39,11 @@ impl Deref for Wire {
         match self {
             Wire(rc) => rc.deref(),
         }
+    }
+}
+impl Clone for Wire {
+    fn clone(&self) -> Self {
+        Wire(Rc::clone(&self.0))
     }
 }
 
