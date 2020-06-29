@@ -8,9 +8,11 @@ use std::ops::Index;
 use std::ops::IndexMut;
 use std::rc::Rc;
 use std::slice::Iter;
+#[cfg(test)]
+use crate::units::bit::{OFF, ON};
 
 /// A wire is a basic unit containing only one bit at a time.
-#[derive(PartialEq, PartialOrd, Eq, Ord)]
+#[derive(PartialEq, PartialOrd, Eq, Ord, Debug)]
 pub struct Wire(Rc<RefCell<Bit>>);
 impl Wire {
     pub fn set(&self, b: Bit) {
@@ -47,7 +49,17 @@ impl Clone for Wire {
     }
 }
 
-#[derive(Clone)]
+#[cfg(test)]
+#[test]
+fn test_wire() {
+    let w = Wire::default();
+    assert_eq!(w.clone(), w);
+    w.set(ON);
+    assert_eq!(w.state(), ON);
+    assert_eq!((*w).clone().into_inner(), ON);
+}
+
+#[derive(Clone, Debug)]
 pub struct Bus(Vec<Wire>); // length = BUS_WIDTH
 impl Bus {
     pub fn new() -> Self {
