@@ -109,3 +109,33 @@ impl MultiANDGate {
         self.ands.iter().for_each(|g| g.run());
     }
 }
+
+/// Truth table:
+///
+///  a  |  b  |  c
+/// OFF | OFF | OFF
+/// OFF | ON  | ON
+/// ON  | OFF | ON
+/// ON  | ON  | ON
+pub struct ORGate {
+    not1: NOTGate,
+    not2: NOTGate,
+    nand: NANDGate,
+}
+impl ORGate {
+    pub fn new(a: Wire, b: Wire, e: Wire) -> Self {
+        let (c, d) = (Wire::default(), Wire::default());
+
+        ORGate {
+            not1: NOTGate::new(a, c.clone()),
+            not2: NOTGate::new(b, d.clone()),
+            nand: NANDGate::new(c, d, e),
+        }
+    }
+
+    pub fn run(&self) {
+        self.not1.run();
+        self.not2.run();
+        self.nand.run();
+    }
+}
