@@ -245,3 +245,59 @@ fn orgate_input_off_off() {
 
     assert_eq!(out.state(), OFF);
 }
+
+#[test]
+fn xorgate_input_on_on() {
+    let in1 = Wire::default();
+    let in2 = Wire::default();
+    let out = Wire::default();
+    let gate = XORGate::new(in1.clone(), in2.clone(), out.clone());
+
+    in1.set(ON);
+    in2.set(ON);
+    gate.run();
+
+    assert_eq!(out.state(), OFF);
+}
+
+#[test]
+fn xorgate_input_off_on() {
+    let in1 = Wire::default();
+    let in2 = Wire::default();
+    let out = Wire::default();
+    let gate = XORGate::new(in1.clone(), in2.clone(), out.clone());
+
+    in1.set(OFF);
+    in2.set(ON);
+    gate.run();
+
+    assert_eq!(out.state(), ON);
+}
+
+#[test]
+fn xorgate_input_on_off() {
+    let in1 = Wire::default();
+    let in2 = Wire::default();
+    let out = Wire::default();
+    let gate = XORGate::new(in1.clone(), in2.clone(), out.clone());
+
+    in1.set(ON);
+    in2.set(OFF);
+    gate.run();
+
+    assert_eq!(out.state(), ON);
+}
+
+#[test]
+fn xorgate_input_off_off() {
+    let in1 = Wire::default();
+    let in2 = Wire::default();
+    let out = Wire::default();
+    let gate = XORGate::new(in1.clone(), in2.clone(), out.clone());
+
+    in1.set(OFF);
+    in2.set(OFF);
+    gate.run();
+
+    assert_eq!(out.state(), OFF);
+}
