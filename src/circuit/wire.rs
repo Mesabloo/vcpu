@@ -90,3 +90,8 @@ impl From<Vec<Wire>> for Bus {
         Bus(wires)
     }
 }
+impl Into<Vec<Wire>> for Bus {
+    fn into(self) -> Vec<Wire> {
+        self.0
+    }
+}
