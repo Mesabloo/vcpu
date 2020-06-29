@@ -20,7 +20,8 @@ impl LeftShifter {
     }
 
     pub fn run(&self) {
-        for idx in 1..BUS_WIDTH - 1 {
+        self.shift_out.set(self.bus1[0].state());
+        for idx in 1..BUS_WIDTH {
             self.bus2[idx - 1].set(self.bus1[idx].state());
         }
         self.bus2[BUS_WIDTH - 1].set(self.shift_in.state());
