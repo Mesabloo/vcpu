@@ -55,16 +55,25 @@ fn bus_state_shared() {
 }
 
 #[test]
-fn notgate_reversing_bit() {
+fn notgate_input_on() {
     let in1 = Wire::default();
     let out = Wire::default();
-    let not = NOTGate::new(in1, out.clone());
+    let not = NOTGate::new(in1.clone(), out.clone());
 
-    not.run();
-
-    assert_eq!(out.state(), ON);
-
+    in1.set(ON);
     not.run();
 
     assert_eq!(out.state(), OFF);
+}
+
+#[test]
+fn notgate_input_off() {
+    let in1 = Wire::default();
+    let out = Wire::default();
+    let not = NOTGate::new(in1.clone(), out.clone());
+
+    in1.set(OFF);
+    not.run();
+
+    assert_eq!(out.state(), ON);
 }
