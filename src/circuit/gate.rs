@@ -1,6 +1,8 @@
 use crate::circuit::wire::Wire;
 use crate::units::bit::{OFF, ON};
 
+use std::iter::repeat_with;
+
 // NOTE: When implementing gates, despite the fact that our bits are represented currently as bools,
 // we won't be using any of the boolean operators. In fact, we will code them all as if they never existed.
 
@@ -137,5 +139,44 @@ impl ORGate {
         self.not1.run();
         self.not2.run();
         self.nand.run();
+    }
+}
+
+/// Truth table:
+///
+///  a  |  b  |  c
+/// OFF | OFF | OFF
+/// OFF | ON  | ON
+/// ON  | OFF | ON
+/// ON  | ON  | OFF
+pub struct XORGate {
+    not1: NOTGate,
+    not2: NOTGate,
+    nand3: NANDGate,
+    nand4: NANDGate,
+    nand5: NANDGate,
+}
+impl XORGate {
+    pub fn new(a: Wire, b: Wire, g: Wire) -> Self {
+        let c = Wire::default();
+        let d = Wire::default();
+        let e = Wire::default();
+        let f = Wire::default();
+
+        XORGate {
+            not1: NOTGate::new(a.clone(), c.clone()),
+            not2: NOTGate::new(b.clone(), d.clone()),
+            nand3: NANDGate::new(c, b, e.clone()),
+            nand4: NANDGate::new(a, d, f.clone()),
+            nand5: NANDGate::new(e, f, g),
+        }
+    }
+
+    pub fn run(&self) {
+        self.not1.run();
+        self.not2.run();
+        self.nand3.run();
+        self.nand4.run();
+        self.nand5.run();
     }
 }
