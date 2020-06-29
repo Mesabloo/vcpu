@@ -1,10 +1,12 @@
+#![cfg(test)]
+
 use vcpu::circuit::wire::*;
 use vcpu::units::bit::{OFF, ON};
 
 #[test]
 fn wire_state_kept() {
     let w = Wire::default();
-    
+
     assert_eq!(w.state(), OFF);
 
     w.set(ON);
@@ -25,4 +27,29 @@ fn wire_state_shared() {
 
     // This is useful because we do want a wire and its clone to point to the same wire
     // (it's some sort of a way to bypass the borrow checker, in fact, because we want to be able to use some wires multiple times and modify theù)
+}
+
+#[test]
+fn bus_state_kept() {
+    let b = Bus::default();
+    b[0].set(ON);
+
+    assert_eq!(
+        b.iter().map(|w| w.state()).collect::<Vec<_>>(),
+        vec![ON, OFF, OFF, OFF, OFF, OFF, OFF, OFF]
+    );
+}
+
+#[test]
+fn bus_state_shared() {
+    let b1 = Bus::default();
+    let b2 = b1.clone();
+
+    b1[2].set(ON);
+
+    assert_eq!(b1[2], b2[2]);
+
+    let inner_b1: Vec<Wire> = b1.into();
+    let inner_b2: Vec<Wire> = b2.into();
+    assert_eq!(inner_b1, inner_b2);
 }
