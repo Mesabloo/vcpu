@@ -42,7 +42,6 @@ fn ram_cell_select_no_set_no_enable() {
 }
 
 #[test]
-#[ignore]  // We currently ignore this test because it fails...
 fn ram_cell_select_set_no_enable() {
     let in1 = Wire::default();
     let in2 = Wire::default();
@@ -58,8 +57,8 @@ fn ram_cell_select_set_no_enable() {
     set.set(ON);
     cell.run();
 
-    assert_eq!(out[2].state(), ON);
-    assert_eq!(out[5].state(), ON);
+    assert_eq!(out[2].state(), OFF);
+    assert_eq!(out[5].state(), OFF);
     // These should be left untouched because `enable` is OFF.
 }
 
