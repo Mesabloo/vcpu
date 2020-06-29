@@ -78,3 +78,10 @@ impl IndexMut<usize> for Bus {
         self.0.index_mut(i)
     }
 }
+impl From<Vec<Wire>> for Bus {
+    fn from(wires: Vec<Wire>) -> Self {
+        assert_eq!(wires.len(), BUS_WIDTH);
+
+        Bus(wires)
+    }
+}
