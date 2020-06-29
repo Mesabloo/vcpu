@@ -1,5 +1,7 @@
 use crate::common::BUS_WIDTH;
 use crate::units::bit::Bit;
+#[cfg(test)]
+use crate::units::bit::{OFF, ON};
 use std::cell::RefCell;
 use std::iter::repeat_with;
 use std::iter::IntoIterator;
@@ -8,8 +10,6 @@ use std::ops::Index;
 use std::ops::IndexMut;
 use std::rc::Rc;
 use std::slice::Iter;
-#[cfg(test)]
-use crate::units::bit::{OFF, ON};
 
 /// A wire is a basic unit containing only one bit at a time.
 #[derive(PartialEq, PartialOrd, Eq, Ord, Debug)]
@@ -106,4 +106,33 @@ impl Into<Vec<Wire>> for Bus {
     fn into(self) -> Vec<Wire> {
         self.0
     }
+}
+
+#[cfg(test)]
+#[test]
+fn test_bus() {
+    let b = Bus::default();
+    assert_eq!(b[0].state(), OFF);
+    b[0].set(ON);
+    assert_eq!(b[0].state(), ON);
+    assert_eq!(b.clone()[0].state(), ON);
+    assert_eq!(
+        b.iter().map(|w| w.state()).collect::<Vec<_>>(),
+        vec![ON, OFF, OFF, OFF, OFF, OFF, OFF, OFF]
+    );
+
+    let b = Bus::from(
+        vec![ON, OFF, ON, OFF, ON, OFF, OFF, OFF]
+            .into_iter()
+            .map(|s| {
+                let w = Wire::default();
+                w.set(s);
+                w
+            })
+            .collect::<Vec<_>>(),
+    );
+    assert_eq!(
+        b.iter().map(|w| w.state()).collect::<Vec<_>>(),
+        vec![ON, OFF, ON, OFF, ON, OFF, OFF, OFF]
+    );
 }
