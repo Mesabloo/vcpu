@@ -54,8 +54,8 @@ impl ANDGate {
 ///
 ///  a  |  b  |  c
 /// OFF | OFF | ON
-/// OFF | ON  | OFF
-/// ON  | OFF | OFF
+/// OFF | ON  | ON
+/// ON  | OFF | ON
 /// ON  | ON  | OFF
 pub struct NANDGate {
     in1: Wire,
