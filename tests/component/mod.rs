@@ -172,3 +172,5 @@ fn enabler_enabled() {
     assert_eq!(bus_in[2].state(), ON);
     assert_eq!(bus_in[7].state(), ON);
 }
+
+pub mod memory;
