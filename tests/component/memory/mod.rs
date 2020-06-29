@@ -1,8 +1,8 @@
 #![cfg(test)]
 
 use vcpu::circuit::wire::{Bus, Wire};
+use vcpu::component::memory::{bit::*, byte::*, register::*};
 use vcpu::units::bit::{OFF, ON};
-use vcpu::component::memory::{bit::*, byte::*};
 
 #[test]
 fn memory_bit_no_set() {
@@ -97,4 +97,105 @@ fn memory_byte_set_unset() {
 
     assert_eq!(b_out[2].state(), ON);
     assert_eq!(b_out[5].state(), ON);
+}
+
+#[test]
+fn register_no_set_no_enable() {
+    let b1_in = Bus::default();
+    let b1_out = Bus::default();
+    let set1 = Wire::default();
+    let enable1 = Wire::default();
+    let r_in = Register::new(b1_in.clone(), set1.clone(), enable1.clone(), b1_out.clone());
+
+    b1_in[1].set(ON);
+    b1_in[3].set(ON);
+    b1_in[6].set(ON);
+    r_in.run();
+
+    assert_eq!(b1_out[1].state(), OFF);
+    assert_eq!(b1_out[3].state(), OFF);
+    assert_eq!(b1_out[6].state(), OFF);
+}
+
+#[test]
+fn register_set_no_enable() {
+    let b1_in = Bus::default();
+    let b1_out = Bus::default();
+    let set1 = Wire::default();
+    let enable1 = Wire::default();
+    let r_in = Register::new(b1_in.clone(), set1.clone(), enable1.clone(), b1_out.clone());
+
+    b1_in[1].set(ON);
+    b1_in[3].set(ON);
+    b1_in[6].set(ON);
+    set1.set(ON);
+    r_in.run();
+
+    assert_eq!(b1_out[1].state(), OFF);
+    assert_eq!(b1_out[3].state(), OFF);
+    assert_eq!(b1_out[6].state(), OFF);
+}
+
+#[test]
+fn register_set_enable() {
+    let b1_in = Bus::default();
+    let b1_out = Bus::default();
+    let set1 = Wire::default();
+    let enable1 = Wire::default();
+    let r_in = Register::new(b1_in.clone(), set1.clone(), enable1.clone(), b1_out.clone());
+
+    b1_in[1].set(ON);
+    b1_in[3].set(ON);
+    b1_in[6].set(ON);
+    set1.set(ON);
+    enable1.set(ON);
+    r_in.run();
+
+    assert_eq!(b1_out[1].state(), ON);
+    assert_eq!(b1_out[3].state(), ON);
+    assert_eq!(b1_out[6].state(), ON);
+}
+
+#[test]
+fn register_set_no_enable_enable() {
+    let b1_in = Bus::default();
+    let b1_out = Bus::default();
+    let set1 = Wire::default();
+    let enable1 = Wire::default();
+    let r_in = Register::new(b1_in.clone(), set1.clone(), enable1.clone(), b1_out.clone());
+
+    b1_in[1].set(ON);
+    b1_in[3].set(ON);
+    b1_in[6].set(ON);
+    set1.set(ON);
+    r_in.run();
+    b1_in[1].set(OFF);
+    b1_in[3].set(OFF);
+    b1_in[6].set(OFF);
+    set1.set(OFF);
+    enable1.set(ON);
+    r_in.run();
+
+    assert_eq!(b1_out[1].state(), ON);
+    assert_eq!(b1_out[3].state(), ON);
+    assert_eq!(b1_out[6].state(), ON);
+}
+
+#[test]
+fn register_no_set_enable() {
+    let b1_in = Bus::default();
+    let b1_out = Bus::default();
+    let set1 = Wire::default();
+    let enable1 = Wire::default();
+    let r_in = Register::new(b1_in.clone(), set1.clone(), enable1.clone(), b1_out.clone());
+
+    b1_in[1].set(ON);
+    b1_in[3].set(ON);
+    b1_in[6].set(ON);
+    enable1.set(ON);
+    r_in.run();
+
+    assert_eq!(b1_out[1].state(), OFF);
+    assert_eq!(b1_out[3].state(), OFF);
+    assert_eq!(b1_out[6].state(), OFF);
 }
