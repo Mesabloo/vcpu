@@ -200,4 +200,19 @@ fn register_no_set_enable() {
     assert_eq!(b1_out[6].state(), OFF);
 }
 
+#[test]
+fn register_set_no_enable_inout() {
+    let bus = Bus::default();
+    let set = Wire::default();
+    let enable = Wire::default();
+    let reg = Register::new(bus.clone(), set.clone(), enable.clone(), bus.clone());
+
+    bus[3].set(ON);
+    set.set(ON);
+    reg.run();
+
+    assert_eq!(bus[3].state(), OFF);
+    // The bus is reset because the `enable` flag is OFF.
+}
+
 pub mod ram;
