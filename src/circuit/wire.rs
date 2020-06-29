@@ -49,16 +49,6 @@ impl Clone for Wire {
     }
 }
 
-#[cfg(test)]
-#[test]
-fn test_wire() {
-    let w = Wire::default();
-    assert_eq!(w.clone(), w);
-    w.set(ON);
-    assert_eq!(w.state(), ON);
-    assert_eq!((*w).clone().into_inner(), ON);
-}
-
 #[derive(Clone, Debug)]
 pub struct Bus(Vec<Wire>); // length = BUS_WIDTH
 impl Bus {
