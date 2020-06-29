@@ -43,9 +43,8 @@ fn test_left_shifter() {
 
     assert_eq!(s_in.state(), OFF);
     assert_eq!(s_out.state(), OFF);
-    let b1_wires: Vec<Wire> = b1.clone().into();
     assert_eq!(
-        b1_wires.iter().map(|w| w.state()).collect::<Vec<_>>(),
+        b1.iter().map(|w| w.state()).collect::<Vec<_>>(),
         vec![ON, OFF, OFF, OFF, OFF, ON, OFF, OFF]
     );
 
@@ -53,9 +52,8 @@ fn test_left_shifter() {
 
     assert_eq!(s_in.state(), OFF);
     assert_eq!(s_out.state(), ON);
-    let b1_wires: Vec<Wire> = b1.clone().into();
     assert_eq!(
-        b1_wires.iter().map(|w| w.state()).collect::<Vec<_>>(),
+        b1.iter().map(|w| w.state()).collect::<Vec<_>>(),
         vec![OFF, OFF, OFF, OFF, ON, OFF, OFF, OFF]
     );
 }
@@ -100,18 +98,16 @@ fn test_right_shifter() {
 
     assert_eq!(s_in.state(), OFF);
     assert_eq!(s_out.state(), OFF);
-    let b1_wires: Vec<Wire> = b1.clone().into();
     assert_eq!(
-        b1_wires.iter().map(|w| w.state()).collect::<Vec<_>>(),
+        b1.iter().map(|w| w.state()).collect::<Vec<_>>(),
         vec![OFF, OFF, OFF, ON, OFF, OFF, OFF, ON]
     );
 
     shift.run();
     assert_eq!(s_in.state(), OFF);
     assert_eq!(s_out.state(), ON);
-    let b1_wires: Vec<Wire> = b1.clone().into();
     assert_eq!(
-        b1_wires.iter().map(|w| w.state()).collect::<Vec<_>>(),
+        b1.iter().map(|w| w.state()).collect::<Vec<_>>(),
         vec![OFF, OFF, OFF, OFF, ON, OFF, OFF, OFF]
     );
 }
