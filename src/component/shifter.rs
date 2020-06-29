@@ -1,7 +1,5 @@
 use crate::circuit::wire::{Bus, Wire};
 use crate::common::BUS_WIDTH;
-#[cfg(test)]
-use crate::units::bit::{OFF, ON};
 
 pub struct LeftShifter {
     bus1: Bus,
@@ -51,33 +49,4 @@ impl RightShifter {
         }
         self.bus2[0].set(self.shift_in.state());
     }
-}
-
-#[cfg(test)]
-#[test]
-fn test_right_shifter() {
-    let b1 = Bus::default();
-    let s_in = Wire::default();
-    let s_out = Wire::default();
-
-    b1[2].set(ON);
-    b1[6].set(ON);
-
-    let shift = RightShifter::new(b1.clone(), b1.clone(), s_in.clone(), s_out.clone());
-    shift.run();
-
-    assert_eq!(s_in.state(), OFF);
-    assert_eq!(s_out.state(), OFF);
-    assert_eq!(
-        b1.iter().map(|w| w.state()).collect::<Vec<_>>(),
-        vec![OFF, OFF, OFF, ON, OFF, OFF, OFF, ON]
-    );
-
-    shift.run();
-    assert_eq!(s_in.state(), OFF);
-    assert_eq!(s_out.state(), ON);
-    assert_eq!(
-        b1.iter().map(|w| w.state()).collect::<Vec<_>>(),
-        vec![OFF, OFF, OFF, OFF, ON, OFF, OFF, OFF]
-    );
 }

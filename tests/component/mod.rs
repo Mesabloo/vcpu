@@ -67,3 +67,65 @@ fn left_shifter_unibus() {
 
     assert_eq!(bus[1].state(), ON);
 }
+
+#[test]
+fn right_shifter_works() {
+    let bus_in = Bus::default();
+    let bus_out = Bus::default();
+    let shift_in = Wire::default();
+    let shift_out = Wire::default();
+    let shifter = RightShifter::new(bus_in.clone(), bus_out.clone(), shift_in, shift_out.clone());
+
+    bus_in[1].set(ON);
+    bus_in[6].set(ON);
+    shifter.run();
+
+    assert_eq!(bus_in[1].state(), ON);
+    assert_eq!(bus_in[6].state(), ON);
+    assert_eq!(bus_out[2].state(), ON);
+    assert_eq!(bus_out[7].state(), ON);
+    assert_eq!(shift_out.state(), OFF);
+}
+
+#[test]
+fn right_shifter_carry() {
+    let bus_in = Bus::default();
+    let bus_out = Bus::default();
+    let shift_in = Wire::default();
+    let shift_out = Wire::default();
+    let shifter = RightShifter::new(bus_in.clone(), bus_out.clone(), shift_in, shift_out.clone());
+
+    bus_in[7].set(ON);
+    shifter.run();
+
+    assert_eq!(bus_out[7].state(), OFF);
+    assert_eq!(shift_out.state(), ON);
+}
+
+#[test]
+fn right_shifter_in() {
+    let bus_in = Bus::default();
+    let bus_out = Bus::default();
+    let shift_in = Wire::default();
+    let shifter = RightShifter::new(bus_in.clone(), bus_out.clone(), shift_in.clone(), shift_in.clone());
+
+    bus_in[7].set(ON);
+    shifter.run();
+
+    assert_eq!(bus_out[0].state(), ON);
+    assert_eq!(bus_out[7].state(), OFF);
+    assert_eq!(shift_in.state(), ON);
+}
+
+#[test]
+fn right_shifter_unibus() {
+    let bus = Bus::default();
+    let shift_in = Wire::default();
+    let shift_out = Wire::default();
+    let shifter = RightShifter::new(bus.clone(), bus.clone(), shift_in, shift_out);
+
+    bus[2].set(ON);
+    shifter.run();
+
+    assert_eq!(bus[3].state(), ON);
+}
