@@ -1,8 +1,6 @@
 use crate::circuit::wire::Wire;
 use crate::units::bit::{OFF, ON};
 
-use std::iter::repeat_with;
-
 // NOTE: When implementing gates, despite the fact that our bits are represented currently as bools,
 // we won't be using any of the boolean operators. In fact, we will code them all as if they never existed.
 
