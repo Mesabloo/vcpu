@@ -28,36 +28,6 @@ impl LeftShifter {
     }
 }
 
-#[cfg(test)]
-#[test]
-fn test_left_shifter() {
-    let b1 = Bus::default();
-    let s_in = Wire::default();
-    let s_out = Wire::default();
-
-    b1[1].set(ON);
-    b1[6].set(ON);
-
-    let shift = LeftShifter::new(b1.clone(), b1.clone(), s_in.clone(), s_out.clone());
-    shift.run();
-
-    assert_eq!(s_in.state(), OFF);
-    assert_eq!(s_out.state(), OFF);
-    assert_eq!(
-        b1.iter().map(|w| w.state()).collect::<Vec<_>>(),
-        vec![ON, OFF, OFF, OFF, OFF, ON, OFF, OFF]
-    );
-
-    shift.run();
-
-    assert_eq!(s_in.state(), OFF);
-    assert_eq!(s_out.state(), ON);
-    assert_eq!(
-        b1.iter().map(|w| w.state()).collect::<Vec<_>>(),
-        vec![OFF, OFF, OFF, OFF, ON, OFF, OFF, OFF]
-    );
-}
-
 pub struct RightShifter {
     bus1: Bus,
     bus2: Bus,
