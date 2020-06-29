@@ -199,3 +199,5 @@ fn register_no_set_enable() {
     assert_eq!(b1_out[3].state(), OFF);
     assert_eq!(b1_out[6].state(), OFF);
 }
+
+pub mod ram;
