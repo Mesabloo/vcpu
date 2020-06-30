@@ -1,8 +1,10 @@
 #![cfg(test)]
 
 use vcpu::circuit::wire::*;
-use vcpu::component::{enabler::*, shifter::*};
+use vcpu::component::{decoder::*, enabler::*, shifter::*};
 use vcpu::units::bit::{OFF, ON};
+
+use std::iter::repeat_with;
 
 #[test]
 fn left_shifter_works() {
@@ -171,6 +173,58 @@ fn enabler_enabled() {
     assert_eq!(bus_out[7].state(), ON);
     assert_eq!(bus_in[2].state(), ON);
     assert_eq!(bus_in[7].state(), ON);
+}
+
+#[test]
+fn decoder2x4_off_off() {
+    let ins = repeat_with(Wire::default).take(2).collect::<Vec<_>>();
+    let outs = repeat_with(Wire::default).take(4).collect::<Vec<_>>();
+    let decoder = Decoder::<2, 4>::new(ins.clone(), outs.clone());
+
+    ins[0].set(ON);
+    ins[1].set(ON);
+    decoder.run();
+
+    assert_eq!(outs.iter().filter(|w| w.state() == ON).count(), 1);
+}
+
+#[test]
+fn decoder2x4_on_off() {
+    let ins = repeat_with(Wire::default).take(2).collect::<Vec<_>>();
+    let outs = repeat_with(Wire::default).take(4).collect::<Vec<_>>();
+    let decoder = Decoder::<2, 4>::new(ins.clone(), outs.clone());
+
+    ins[0].set(ON);
+    ins[1].set(OFF);
+    decoder.run();
+
+    assert_eq!(outs.iter().filter(|w| w.state() == ON).count(), 1);
+}
+
+#[test]
+fn decoder2x4_off_on() {
+    let ins = repeat_with(Wire::default).take(2).collect::<Vec<_>>();
+    let outs = repeat_with(Wire::default).take(4).collect::<Vec<_>>();
+    let decoder = Decoder::<2, 4>::new(ins.clone(), outs.clone());
+
+    ins[0].set(OFF);
+    ins[1].set(ON);
+    decoder.run();
+
+    assert_eq!(outs.iter().filter(|w| w.state() == ON).count(), 1);
+}
+
+#[test]
+fn decoder2x4_on_on() {
+    let ins = repeat_with(Wire::default).take(2).collect::<Vec<_>>();
+    let outs = repeat_with(Wire::default).take(4).collect::<Vec<_>>();
+    let decoder = Decoder::<2, 4>::new(ins.clone(), outs.clone());
+
+    ins[0].set(ON);
+    ins[1].set(ON);
+    decoder.run();
+
+    assert_eq!(outs.iter().filter(|w| w.state() == ON).count(), 1);
 }
 
 pub mod memory;
