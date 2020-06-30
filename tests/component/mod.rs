@@ -179,52 +179,80 @@ fn enabler_enabled() {
 fn decoder2x4_off_off() {
     let ins = repeat_with(Wire::default).take(2).collect::<Vec<_>>();
     let outs = repeat_with(Wire::default).take(4).collect::<Vec<_>>();
-    let decoder = Decoder::<2, 4>::new(ins.clone(), outs.clone());
+    let decoder = Decoder2X4::new(
+        ins[0].clone(),
+        ins[1].clone(),
+        outs[0].clone(),
+        outs[1].clone(),
+        outs[2].clone(),
+        outs[3].clone(),
+    );
 
-    ins[0].set(ON);
-    ins[1].set(ON);
+    ins[0].set(OFF);
+    ins[1].set(OFF);
     decoder.run();
 
-    assert_eq!(outs.iter().filter(|w| w.state() == ON).count(), 1);
+    assert_eq!(outs[0].state(), ON);
 }
 
 #[test]
 fn decoder2x4_on_off() {
     let ins = repeat_with(Wire::default).take(2).collect::<Vec<_>>();
     let outs = repeat_with(Wire::default).take(4).collect::<Vec<_>>();
-    let decoder = Decoder::<2, 4>::new(ins.clone(), outs.clone());
+    let decoder = Decoder2X4::new(
+        ins[0].clone(),
+        ins[1].clone(),
+        outs[0].clone(),
+        outs[1].clone(),
+        outs[2].clone(),
+        outs[3].clone(),
+    );
 
     ins[0].set(ON);
     ins[1].set(OFF);
     decoder.run();
 
-    assert_eq!(outs.iter().filter(|w| w.state() == ON).count(), 1);
+    assert_eq!(outs[2].state(), ON);
 }
 
 #[test]
 fn decoder2x4_off_on() {
     let ins = repeat_with(Wire::default).take(2).collect::<Vec<_>>();
     let outs = repeat_with(Wire::default).take(4).collect::<Vec<_>>();
-    let decoder = Decoder::<2, 4>::new(ins.clone(), outs.clone());
+    let decoder = Decoder2X4::new(
+        ins[0].clone(),
+        ins[1].clone(),
+        outs[0].clone(),
+        outs[1].clone(),
+        outs[2].clone(),
+        outs[3].clone(),
+    );
 
     ins[0].set(OFF);
     ins[1].set(ON);
     decoder.run();
 
-    assert_eq!(outs.iter().filter(|w| w.state() == ON).count(), 1);
+    assert_eq!(outs[1].state(), ON);
 }
 
 #[test]
 fn decoder2x4_on_on() {
     let ins = repeat_with(Wire::default).take(2).collect::<Vec<_>>();
     let outs = repeat_with(Wire::default).take(4).collect::<Vec<_>>();
-    let decoder = Decoder::<2, 4>::new(ins.clone(), outs.clone());
+    let decoder = Decoder2X4::new(
+        ins[0].clone(),
+        ins[1].clone(),
+        outs[0].clone(),
+        outs[1].clone(),
+        outs[2].clone(),
+        outs[3].clone(),
+    );
 
     ins[0].set(ON);
     ins[1].set(ON);
     decoder.run();
 
-    assert_eq!(outs.iter().filter(|w| w.state() == ON).count(), 1);
+    assert_eq!(outs[3].state(), ON);
 }
 
 pub mod memory;
