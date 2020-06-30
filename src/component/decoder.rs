@@ -1,9 +1,6 @@
 use crate::circuit::gate::{MultiANDGate, NOTGate};
 use crate::circuit::wire::Wire;
 
-use itertools::Itertools;
-use std::iter::repeat_with;
-
 pub struct Decoder2X4 {
     not_a: NOTGate,
     not_b: NOTGate,
