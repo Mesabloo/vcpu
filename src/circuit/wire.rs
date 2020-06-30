@@ -8,9 +8,10 @@ use std::ops::Index;
 use std::ops::IndexMut;
 use std::rc::Rc;
 use std::slice::Iter;
+use std::cmp::Ordering;
 
 /// A wire is a basic unit containing only one bit at a time.
-#[derive(PartialEq, PartialOrd, Eq, Ord, Debug)]
+#[derive(Debug)]
 pub struct Wire(Rc<RefCell<Bit>>);
 impl Wire {
     pub fn set(&self, b: Bit) {
@@ -44,6 +45,28 @@ impl Deref for Wire {
 impl Clone for Wire {
     fn clone(&self) -> Self {
         Wire(Rc::clone(&self.0))
+    }
+}
+impl PartialEq for Wire {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Wire(rc1), Wire(rc2)) => rc1.as_ptr() == rc2.as_ptr(),
+        }
+    }
+}
+impl PartialOrd for Wire {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        match (self, other) {
+            (Wire(rc1), Wire(rc2)) => rc1.as_ptr().partial_cmp(&rc2.as_ptr()),
+        }
+    }
+}
+impl Eq for Wire {}
+impl Ord for Wire {
+    fn cmp(&self, other: &Self) -> Ordering {
+        match (self, other) {
+            (Wire(rc1), Wire(rc2)) => rc1.as_ptr().cmp(&rc2.as_ptr()),
+        }
     }
 }
 
